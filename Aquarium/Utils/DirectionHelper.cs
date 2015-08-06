@@ -8,6 +8,9 @@ namespace Aquarium.Utils
 {
 	public static class DirectionHelper
 	{
+		/// <summary>
+		/// Количество направлений
+		/// </summary>
 		public static readonly int DirectionCount = Enum.GetNames(typeof(Direction)).Length;
 	}
 }

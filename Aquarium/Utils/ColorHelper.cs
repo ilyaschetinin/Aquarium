@@ -11,6 +11,9 @@ namespace Aquarium.Utils
 		private static readonly Random _random = new Random();
 		private static readonly KnownColor[] _colorNames = (KnownColor[])Enum.GetValues(typeof(KnownColor));
 
+		/// <summary>
+		/// Получить случайный цвет
+		/// </summary>
 		public static Color GetRandomColor()
 		{
 			int length = _colorNames.Length;

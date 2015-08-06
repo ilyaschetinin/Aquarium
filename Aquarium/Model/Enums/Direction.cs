@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Aquarium.Model.Enums
 {
+	/// <summary>
+	/// Направление
+	/// </summary>
 	public enum Direction
 	{
 		Left = 0,
@@ -13,6 +16,9 @@ namespace Aquarium.Model.Enums
 
 	public static class DirectionExtension
 	{
+		/// <summary>
+		/// Получить противоположное направление
+		/// </summary>
 		public static Direction GetOpposite(this Direction direction)
 		{
 			return direction == Direction.Left ? Direction.Right : Direction.Left;

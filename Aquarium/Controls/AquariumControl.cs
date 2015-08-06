@@ -23,7 +23,10 @@ namespace Aquarium.Controls
 		{
 			InitializeComponent();
 		}
-
+		
+		/// <summary>
+		/// Обновить рыбок
+		/// </summary>
 		public void UpdateFishes(List<IFish> fishes)
 		{
 			_fishes = fishes;
@@ -50,16 +53,21 @@ namespace Aquarium.Controls
 			}
 		}
 
+		/// <summary>
+		/// Получение цвета рыбки
+		/// </summary>
 		private Color GetColor(int fishId)
 		{
 			Color color;
 
 			if (_fishColors.ContainsKey(fishId))
 			{
+				// За данной рыбкой уже закреплен цвет
 				color = _fishColors[fishId];
 			}
 			else
 			{
+				// Присваиваем рыбке случайный цвет
 				color = ColorHelper.GetRandomColor();
 				_fishColors[fishId] = color;				
 			}
