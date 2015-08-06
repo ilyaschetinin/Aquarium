@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Aquarium.Controllers;
+using Aquarium.Model;
 
 namespace Aquarium
 {
@@ -15,7 +17,12 @@ namespace Aquarium
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new MainForm());
+
+			MainForm form = new MainForm();
+			AquariumModel model = AquariumModel.Instance;
+			AquariumController controller = new AquariumController(form, model);
+
+			Application.Run(form);
 		}
 	}
 }

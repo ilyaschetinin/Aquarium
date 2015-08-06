@@ -6,7 +6,7 @@ using Aquarium.Model.Enums;
 
 namespace Aquarium.Model
 {
-	public class Fish
+	public class Fish : IFish
 	{
 		public const int DEFAULT_SPEED = 10;
 

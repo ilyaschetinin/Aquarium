@@ -28,12 +28,34 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
+			this.aquariumControl = new Aquarium.Controls.AquariumControl();
+			this.SuspendLayout();
+			// 
+			// aquariumControl
+			// 
+			this.aquariumControl.BackColor = System.Drawing.Color.LightBlue;
+			this.aquariumControl.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.aquariumControl.Location = new System.Drawing.Point(0, 0);
+			this.aquariumControl.Name = "aquariumControl";
+			this.aquariumControl.Size = new System.Drawing.Size(784, 447);
+			this.aquariumControl.TabIndex = 0;
+			// 
+			// MainForm
+			// 
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Text = "Form1";
+			this.ClientSize = new System.Drawing.Size(784, 447);
+			this.Controls.Add(this.aquariumControl);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			this.Name = "MainForm";
+			this.Text = "Aquarium";
+			this.ResumeLayout(false);
+
 		}
 
 		#endregion
+
+		private Controls.AquariumControl aquariumControl;
 	}
 }
 
