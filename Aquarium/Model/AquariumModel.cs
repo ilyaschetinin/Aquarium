@@ -8,7 +8,7 @@ using Aquarium.Utils;
 
 namespace Aquarium.Model
 {
-	public class AquariumModel : IAquarium
+	public sealed class AquariumModel : IAquarium
 	{
 		#region Constants
 
@@ -26,6 +26,24 @@ namespace Aquarium.Model
 		/// Максимальная скорость генерируемых рыбок
 		/// </summary>
 		private const int MAX_SPEED = 20;
+
+		/// Минимальный размер генерируемых рыбок по оси X
+		/// </summary>
+		private const int MIN_SIZE_X = 1;
+
+		/// <summary>
+		/// Максимальный размер генерируемых рыбок по оси X
+		/// </summary>
+		private const int MAX_SIZE_X = 20;
+
+		/// Минимальный размер генерируемых рыбок по оси Y
+		/// </summary>
+		private const int MIN_SIZE_Y = 1;
+
+		/// <summary>
+		/// Максимальный размер генерируемых рыбок по оси Y
+		/// </summary>
+		private const int MAY_SIZE_Y = 20;
 
 		#endregion Constants
 
@@ -151,11 +169,13 @@ namespace Aquarium.Model
 				// выбираем все параметры рыбок случайным образом
 				int posX = random.Next(SizeX + 1);
 				int posY = random.Next(SizeY + 1);
+				int sizeX = random.Next(MIN_SIZE_X, MAX_SIZE_X + 1);
+				int sizeY = random.Next(MIN_SIZE_Y, MAY_SIZE_Y + 1);
 				Direction movementDirection = (Direction)random.Next(DirectionHelper.DirectionCount);
 				int id = fishNumber;
 				int speed = random.Next(MIN_SPEED, MAX_SPEED + 1);
 				
-				Fish fish = new Fish(this, id, posX, posY, movementDirection, speed);
+				Fish fish = new Fish(id, posX, posY, sizeX, sizeY, movementDirection, speed);
 				_fishes.Add(fish);
 			}
 		}

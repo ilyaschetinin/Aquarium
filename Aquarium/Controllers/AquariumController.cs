@@ -66,7 +66,7 @@ namespace Aquarium.Controllers
 				CancellationToken token = _cancellationTokenSource.Token;
 
 				_task = new Task(Loop, token, token);
-				_task.ContinueWith(HandleTaskException, TaskContinuationOptions.OnlyOnFaulted);
+				_task.ContinueWith(HandleTaskException, token, TaskContinuationOptions.OnlyOnFaulted, TaskScheduler.FromCurrentSynchronizationContext());
 				_task.Start();
 			}
 		}
@@ -92,7 +92,6 @@ namespace Aquarium.Controllers
 		private void Loop(object obj)
 		{
 			CancellationToken token = (CancellationToken)obj;
-
 			while (true)
 			{
 				if (token.IsCancellationRequested)

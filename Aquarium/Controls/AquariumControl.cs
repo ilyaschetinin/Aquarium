@@ -43,13 +43,14 @@ namespace Aquarium.Controls
 			foreach (IFish fish in _fishes)
 			{
 				Color color = GetColor(fish.Id);
-				Brush brush = new SolidBrush(color);
-				
-				int x = fish.X - FISH_WIDTH / 2;
-				int y = fish.Y - FISH_HEIGHT / 2;
-				Rectangle rectangle = new Rectangle(x, y, FISH_WIDTH, FISH_HEIGHT);
+				using (Brush brush = new SolidBrush(color))
+				{
+					int x = fish.X - FISH_WIDTH / 2;
+					int y = fish.Y - FISH_HEIGHT / 2;
+					Rectangle rectangle = new Rectangle(x, y, FISH_WIDTH, FISH_HEIGHT);
 
-				e.Graphics.FillEllipse(brush, rectangle);
+					e.Graphics.FillEllipse(brush, rectangle);
+				}
 			}
 		}
 
