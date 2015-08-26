@@ -4,33 +4,28 @@ using System.Linq;
 using System.Text;
 using Aquarium.Model.Enums;
 
-namespace Aquarium.Model
+namespace Aquarium.Model.Strategies
 {
-	public interface IFish
+	public interface IFishContext
 	{
-		/// <summary>
-		/// Id рыбки
-		/// </summary>
-		int Id { get; }
-
 		/// <summary>
 		/// Позиция рыбки по оси X
 		/// </summary>
-		int X { get; }
+		int X { get; set; }
 
 		/// <summary>
 		/// Позиция рыбки по оси Y
 		/// </summary>
-		int Y { get; }
+		int Y { get; set; }
 
 		/// <summary>
 		/// Напраление движения рыбки
 		/// </summary>
-		Direction MovementDirection { get; }
+		Direction MovementDirection { get; set; }
 
 		/// <summary>
 		/// Скорость рыбки
 		/// </summary>
-		int Speed { get; }
+		int Speed { get; set; }
 	}
 }

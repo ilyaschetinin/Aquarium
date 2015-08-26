@@ -5,54 +5,37 @@ using System.Text;
 using Aquarium.Model.Enums;
 using System.Collections.ObjectModel;
 using Aquarium.Utils;
+using Aquarium.Model.Entities;
+using Aquarium.Model.Initialization;
+using Aquarium.Model.Factory;
+using Aquarium.Model.Entities.Interfaces;
+using Aquarium.Model.Strategies;
+using System.Threading.Tasks;
+using System.Threading;
+using Aquarium.View;
 
 namespace Aquarium.Model
 {
-	public sealed class AquariumModel : IAquarium
+	public sealed class AquariumModel : IAquarium, IAquariumContext
 	{
 		#region Constants
 
 		/// <summary>
-		/// Число рыбок в аквариуме по умолчанию
+		/// Частота обновления аквариума в миллисекундах
 		/// </summary>
-		private const int DEFAULT_FISH_COUNT = 10;
-
-		/// <summary>
-		/// Минимальная скорость генерируемых рыбок
-		/// </summary>
-		private const int MIN_SPEED = 1;
-
-		/// <summary>
-		/// Максимальная скорость генерируемых рыбок
-		/// </summary>
-		private const int MAX_SPEED = 20;
-
-		/// Минимальный размер генерируемых рыбок по оси X
-		/// </summary>
-		private const int MIN_SIZE_X = 1;
-
-		/// <summary>
-		/// Максимальный размер генерируемых рыбок по оси X
-		/// </summary>
-		private const int MAX_SIZE_X = 20;
-
-		/// Минимальный размер генерируемых рыбок по оси Y
-		/// </summary>
-		private const int MIN_SIZE_Y = 1;
-
-		/// <summary>
-		/// Максимальный размер генерируемых рыбок по оси Y
-		/// </summary>
-		private const int MAY_SIZE_Y = 20;
+		private const int REFRESH_FREQUENCY_MS = 50;
 
 		#endregion Constants
 
 		#region Fields
-
-		private List<Fish> _fishes = new List<Fish>();
-
+		
 		private static volatile AquariumModel _instance;
 		private static object syncObj = new Object();
+
+		private Task _task;
+		private CancellationTokenSource _cancellationTokenSource;
+
+		private IView _view;
 
 		#endregion Fields
 
@@ -96,14 +79,12 @@ namespace Aquarium.Model
 		}
 
 		/// <summary>
-		/// Рыбки
+		/// Объекты
 		/// </summary>
-		List<IFish> IAquarium.Fishes
+		private List<IAquariumObject> Objects
 		{
-			get
-			{
-				return _fishes.OfType<IFish>().ToList();
-			}
+			get;
+			set;
 		}
 
 		#endregion Properties
@@ -121,63 +102,122 @@ namespace Aquarium.Model
 		/// <summary>
 		/// Инициализация аквариума
 		/// </summary>
-		/// <param name="sizeX">Ширина аквариума</param>
-		/// <param name="sizeY">Высота аквариума</param>
-		public void Init(int sizeX, int sizeY)
+		public void Init(AquariumInitializationParameters parameters, AquariumObjectListInitializer aquariumObjectListInitializer, AquariumObjectFactory factory, IView view)
 		{
-			Init(sizeX, sizeY, DEFAULT_FISH_COUNT);
-		}
-		
-		/// <summary>
-		/// Инициализация аквариума
-		/// </summary>
-		/// <param name="sizeX">Ширина аквариума</param>
-		/// <param name="sizeY">Высота аквариума</param>
-		/// <param name="fishCount">Количество рыбок</param>
-		public void Init(int sizeX, int sizeY, int fishCount)
-		{
-			SizeX = sizeX;
-			SizeY = sizeY;
+			_view = view;
 
-			GenerateFishes(fishCount);
+			SizeX = parameters.AquariumSizeX;
+			SizeY = parameters.AquariumSizeY;
+
+			Objects = aquariumObjectListInitializer.Init(parameters, factory);
 		}
 
 		/// <summary>
-		/// Передвинуть всех рыбок
+		/// Запуск аквариума
 		/// </summary>
-		public void Move()
+		public void Start()
 		{
-			foreach (Fish fish in _fishes)
+			if (_task == null)
 			{
-				fish.Move();
+				_cancellationTokenSource = new CancellationTokenSource();
+
+				CancellationToken token = _cancellationTokenSource.Token;
+
+				_task = new Task(Loop, token, token);
+				_task.ContinueWith(HandleTaskException, token, TaskContinuationOptions.OnlyOnFaulted, TaskScheduler.FromCurrentSynchronizationContext());
+				_task.Start();
 			}
+		}
+
+		/// <summary>
+		/// Остановка аквариума
+		/// </summary>
+		public void Stop()
+		{
+			if (_cancellationTokenSource != null)
+			{
+				_cancellationTokenSource.Cancel();
+			}
+		}
+
+		/// <summary>
+		/// Можно ли передвинуться в указанную позицию
+		/// </summary>
+		public bool IsValidPosition(int posX, int posY)
+		{
+			return 0 <= posX && posX <= SizeX &&
+				0 <= posY && posY <= SizeY;
+		}
+				
+		/// <summary>
+		/// Получить случайную позицию по оси X
+		/// </summary>
+		public int GetRandomPosX()
+		{
+			Random random = new Random();
+			return random.Next(0, SizeX + 1);
+		}
+
+		/// <summary>
+		/// Получить случайную позицию по оси Y
+		/// </summary>
+		public int GetRandomPosY()
+		{
+			Random random = new Random();
+			return random.Next(0, SizeY + 1);
 		}
 
 		#endregion Public Methods
 
 		#region Private Methods
-		
-		/// <summary>
-		/// Генерация рыбок
-		/// </summary>
-		private void GenerateFishes(int fishCount)
-		{
-			Random random = new Random();
 
-			for (int fishNumber = 0; fishNumber < fishCount; fishNumber++)
+		/// <summary>
+		/// Метод для обновления модели и представления
+		/// </summary>
+		private void Loop(object obj)
+		{
+			CancellationToken token = (CancellationToken)obj;
+			while (true)
 			{
-				// выбираем все параметры рыбок случайным образом
-				int posX = random.Next(SizeX + 1);
-				int posY = random.Next(SizeY + 1);
-				int sizeX = random.Next(MIN_SIZE_X, MAX_SIZE_X + 1);
-				int sizeY = random.Next(MIN_SIZE_Y, MAY_SIZE_Y + 1);
-				Direction movementDirection = (Direction)random.Next(DirectionHelper.DirectionCount);
-				int id = fishNumber;
-				int speed = random.Next(MIN_SPEED, MAX_SPEED + 1);
-				
-				Fish fish = new Fish(id, posX, posY, sizeX, sizeY, movementDirection, speed);
-				_fishes.Add(fish);
+				if (token.IsCancellationRequested)
+				{
+					return;
+				}
+
+				// Обновление модели
+				Update();
+
+				Thread.Sleep(REFRESH_FREQUENCY_MS);
 			}
+		}
+
+		/// <summary>
+		/// Обновиться
+		/// </summary>
+		private void Update()
+		{
+			var movableObjects = Objects.OfType<IAquariumMovableObject>();
+			foreach (IAquariumMovableObject movableObject in movableObjects)
+			{
+				IAquariumContext aquariumContext = this;
+				movableObject.Move(aquariumContext);
+			}
+
+			_view.OnBeforeUpdate();
+
+			var drawableObjects = Objects.OfType<IAquariumDrawableObject>();
+			foreach (IAquariumDrawableObject drawableObject in drawableObjects)
+			{
+				drawableObject.Draw();
+			}
+		}
+
+		/// <summary>
+		/// Передать в представление исключение из потока модели
+		/// </summary>
+		private void HandleTaskException(Task task)
+		{
+			_view.HandleException(task.Exception);
 		}
 		
 		#endregion Private Methods

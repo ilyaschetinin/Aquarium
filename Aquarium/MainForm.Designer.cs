@@ -28,7 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.aquariumControl = new Aquarium.Controls.AquariumControl();
+			this.aquariumControl = new Aquarium.View.Controls.AquariumControl();
 			this.SuspendLayout();
 			// 
 			// aquariumControl
@@ -55,7 +55,7 @@
 
 		#endregion
 
-		private Controls.AquariumControl aquariumControl;
+		private View.Controls.AquariumControl aquariumControl;
 	}
 }
 

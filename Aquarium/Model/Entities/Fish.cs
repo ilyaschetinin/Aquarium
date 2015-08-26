@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using Aquarium.Model.Enums;
 using Aquarium.Model.Strategies;
+using Aquarium.Model.Entities.Parameters;
+using Aquarium.Model.Entities.Interfaces;
 
-namespace Aquarium.Model
+namespace Aquarium.Model.Entities
 {
-	public class Fish : IFish
+	public class Fish : IFishContext, IAquariumObject, IAquariumMovableObject, IAquariumDrawableObject
 	{
 		#region Properties
 
@@ -26,7 +28,7 @@ namespace Aquarium.Model
 		public int X
 		{
 			get;
-			private set;
+			set;
 		}
 
 		/// <summary>
@@ -35,7 +37,7 @@ namespace Aquarium.Model
 		public int Y
 		{
 			get;
-			private set;
+			set;
 		}
 
 		/// <summary>
@@ -44,7 +46,7 @@ namespace Aquarium.Model
 		public int SizeX
 		{
 			get;
-			private set;
+			set;
 		}
 
 		/// <summary>
@@ -53,7 +55,7 @@ namespace Aquarium.Model
 		public int SizeY
 		{
 			get;
-			private set;
+			set;
 		}
 
 		/// <summary>
@@ -62,7 +64,7 @@ namespace Aquarium.Model
 		public Direction MovementDirection
 		{
 			get;
-			private set;
+			set;
 		}
 
 		/// <summary>
@@ -71,13 +73,25 @@ namespace Aquarium.Model
 		public int Speed
 		{
 			get;
-			private set;
+			set;
 		}
 
-		public IMovementStrategy Strategy
+		/// <summary>
+		/// Стратегия движения
+		/// </summary>
+		public IMovementStrategy MovementStrategy
 		{
 			get;
-			private set;
+			set;
+		}
+
+		/// <summary>
+		/// Рисователь
+		/// </summary>
+		public IAquariumObjectDrawer Drawer
+		{
+			get;
+			set;
 		}
 
 		#endregion Properties
@@ -87,21 +101,18 @@ namespace Aquarium.Model
 		/// <summary>
 		/// Конструктор
 		/// </summary>
-		/// <param name="id">Id рыбки</param>
-		/// <param name="posX">Позиция рыбки по оси X</param>
-		/// <param name="posY">Позиция рыбки по оси Y</param>
-		/// <param name="direction">Напраление движения рыбки</param>
-		/// <param name="speed">Скорость рыбки</param>
-		public Fish(int id, int posX, int posY, int sizeX, int sizeY, Direction direction, int speed, IMovementStrategy strategy)
+		public Fish(IAquariumObjectDrawer drawer, FishParameters parameters)
 		{
-			Id = id;
-			X = posX;
-			Y = posY;
-			SizeX = sizeX;
-			SizeY = sizeY;
-			MovementDirection = direction;
-			Speed = speed;
-			Strategy = strategy;
+			Drawer = drawer;
+
+			Id = parameters.Id;
+			X = parameters.X;
+			Y = parameters.Y;
+			SizeX = parameters.SizeX;
+			SizeY = parameters.SizeY;
+			MovementDirection = parameters.MovementDirection;
+			Speed = parameters.Speed;
+			MovementStrategy = parameters.MovementStrategy;
 		}
 
 		#endregion Constructor
@@ -113,15 +124,21 @@ namespace Aquarium.Model
 		/// </summary>
 		public void Move(IAquariumContext aquarium)
 		{
-			Strategy.Move(aquarium, this);
+			if (MovementStrategy != null)
+			{
+				MovementStrategy.Move(aquarium, this);
+			}
 		}
 
 		/// <summary>
-		/// Поменять направление движения рыбки
+		/// Нарисовать рыбку
 		/// </summary>
-		public void SetDirection(Direction direction)
+		public void Draw()
 		{
-			MovementDirection = direction;
+			if (Drawer != null)
+			{
+				Drawer.Draw(this);
+			}
 		}
 
 		#endregion Public Methods

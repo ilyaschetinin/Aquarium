@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Aquarium.Controllers;
 using Aquarium.Model;
+using Aquarium.Model.Factory;
+using Aquarium.Model.Enums;
+using Aquarium.View.Drawers;
 
 namespace Aquarium
 {
@@ -19,10 +21,15 @@ namespace Aquarium
 			Application.SetCompatibleTextRenderingDefault(false);
 
 			Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
-
+			
 			MainForm form = new MainForm();
+
+			AquariumObjectFactory factory = GetFactory(form);
+
 			AquariumModel model = AquariumModel.Instance;
-			AquariumController controller = new AquariumController(form, model);
+			model.Init(new Model.Initialization.AquariumInitializationParameters(form.Size.Width, form.Size.Height), new Model.Initialization.AquariumObjectListInitializer(), factory, form);
+
+			model.Start();
 
 			Application.Run(form);
 		}
@@ -34,6 +41,16 @@ namespace Aquarium
 		{
 			string msg = e.ToString();
 			MessageBox.Show(msg);
+		}
+
+		private static AquariumObjectFactory GetFactory(Aquarium.View.IDrawableView drawView)
+		{
+			AquariumObjectFactory factory = new AquariumObjectFactory();
+
+			factory.Register(AquariumObjectType.Fish, new FishDrawer(drawView));
+			factory.Register(AquariumObjectType.Seaweed, new SeaweedDrawer(drawView));
+
+			return factory;
 		}
 	}
 }

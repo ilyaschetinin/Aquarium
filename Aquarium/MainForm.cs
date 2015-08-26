@@ -7,34 +7,39 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Aquarium.View;
-using Aquarium.Controllers;
 using Aquarium.Model;
+using Aquarium.View.Entities;
+using Aquarium.Utils;
 
 namespace Aquarium
 {
-	public partial class MainForm : Form, IView
+	public partial class MainForm : Form, IView, IDrawableView
 	{
-		private IAquariumController _controller;
-
 		public MainForm()
 		{
 			InitializeComponent();
+
+			this.DoubleBuffered = true;
+		}
+
+		public void Draw(ImageInfo imageInfo)
+		{
+			this.UIThread(() =>
+			{
+				aquariumControl.Draw(imageInfo);
+			});
 		}
 
 		/// <summary>
-		/// Задать контроллер
+		/// Вызывается перед обновлением
 		/// </summary>
-		public void SetController(Controllers.IAquariumController controller)
+		public void OnBeforeUpdate()
 		{
-			_controller = controller;
-		}
-
-		/// <summary>
-		/// Обновить рыбок
-		/// </summary>
-		public void UpdateFishes(List<IFish> fishes)
-		{
-			aquariumControl.UpdateFishes(fishes);
+			this.UIThread(() =>
+			{
+				aquariumControl.Invalidate();
+				aquariumControl.Update();
+			});
 		}
 
 		/// <summary>
@@ -42,21 +47,24 @@ namespace Aquarium
 		/// </summary>
 		public void HandleException(Exception ex)
 		{
-			string msg = ex.ToString();
-			MessageBox.Show(msg);
+			this.UIThread(() =>
+			{
+				string msg = ex.ToString();
+				MessageBox.Show(msg);
+			});
 		}
 
-		protected override void OnShown(EventArgs e)
-		{
-			base.OnShown(e);
+		//protected override void OnShown(EventArgs e)
+		//{
+		//    base.OnShown(e);
 
-			// Задаем размеры аквариума
-			int x = aquariumControl.Size.Width;
-			int y = aquariumControl.Size.Height;
-			_controller.Init(x, y);
+		//    // Задаем размеры аквариума
+		//    int x = aquariumControl.Size.Width;
+		//    int y = aquariumControl.Size.Height;
+		//    _controller.Init(x, y);
 
-			// Запускаем аквариум
-			_controller.Start();
-		}
+		//    // Запускаем аквариум
+		//    _controller.Start();
+		//}
 	}
 }

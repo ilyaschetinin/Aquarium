@@ -7,6 +7,6 @@ namespace Aquarium.Model.Strategies
 {
 	public interface IMovementStrategy
 	{
-		void Move(IAquariumContext aquarium, IFish fish);
+		void Move(IAquariumContext aquarium, IFishContext fish);
 	}
 }

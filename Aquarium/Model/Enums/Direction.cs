@@ -24,4 +24,12 @@ namespace Aquarium.Model.Enums
 			return direction == Direction.Left ? Direction.Right : Direction.Left;
 		}
 	}
+
+	public static class DirectionHelper
+	{
+		/// <summary>
+		/// Количество направлений
+		/// </summary>
+		public static readonly int DirectionCount = Enum.GetNames(typeof(Direction)).Length;
+	}
 }

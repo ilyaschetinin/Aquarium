@@ -1,4 +1,4 @@
-﻿namespace Aquarium.Controls
+﻿namespace Aquarium.View.Controls
 {
 	partial class AquariumControl
 	{
