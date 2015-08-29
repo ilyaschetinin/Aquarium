@@ -31,39 +31,39 @@ namespace Aquarium.Model.Initialization
 
 		/// Минимальный размер генерируемых рыбок по оси X
 		/// </summary>
-		private const int FISH_MIN_SIZE_X = 1;
+		private const int FISH_MIN_SIZE_X = 10;
 
 		/// <summary>
 		/// Максимальный размер генерируемых рыбок по оси X
 		/// </summary>
-		private const int FISH_MAX_SIZE_X = 20;
+		private const int FISH_MAX_SIZE_X = 100;
 
 		/// Минимальный размер генерируемых рыбок по оси Y
 		/// </summary>
-		private const int FISH_MIN_SIZE_Y = 1;
+		private const int FISH_MIN_SIZE_Y = 10;
 
 		/// <summary>
 		/// Максимальный размер генерируемых рыбок по оси Y
 		/// </summary>
-		private const int FISH_MAX_SIZE_Y = 20;
+		private const int FISH_MAX_SIZE_Y = 100;
 		
 		/// Минимальный размер генерируемых водорослей по оси X
 		/// </summary>
-		private const int SEAWEED_MIN_SIZE_X = 1;
+		private const int SEAWEED_MIN_SIZE_X = 10;
 
 		/// <summary>
 		/// Максимальный размер генерируемых водорослей по оси X
 		/// </summary>
-		private const int SEAWEED_MAX_SIZE_X = 20;
+		private const int SEAWEED_MAX_SIZE_X = 100;
 
 		/// Минимальный размер генерируемых водорослей по оси Y
 		/// </summary>
-		private const int SEAWEED_MIN_SIZE_Y = 1;
+		private const int SEAWEED_MIN_SIZE_Y = 10;
 
 		/// <summary>
 		/// Максимальный размер генерируемых водорослей по оси Y
 		/// </summary>
-		private const int SEAWEED_MAX_SIZE_Y = 20;
+		private const int SEAWEED_MAX_SIZE_Y = 500;
 
 		#endregion Constants
 				

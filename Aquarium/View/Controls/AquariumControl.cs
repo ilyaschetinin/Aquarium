@@ -7,39 +7,46 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Aquarium.Model;
-using Aquarium.Utils;
-using Aquarium.View.Entities;
+using Aquarium.Model.Entities.Interfaces;
+using Aquarium.Model.Rendering;
 
 namespace Aquarium.View.Controls
 {
-	public partial class AquariumControl : UserControl
+	public partial class AquariumControl : UserControl, IDrawingControl
 	{
-		private const int SCALE_MULTIPLIER = 20;
+		private const int SCALE_MULTIPLIER = 5;
 
+		private List<IAquariumDrawableObject> _objects;
+		
 		public AquariumControl()
 		{
 			InitializeComponent();
+			this.SetStyle(
+				System.Windows.Forms.ControlStyles.UserPaint |
+				System.Windows.Forms.ControlStyles.AllPaintingInWmPaint |
+				System.Windows.Forms.ControlStyles.OptimizedDoubleBuffer,
+				true);
 		}
 
-		public void Draw(ImageInfo imageInfo)
+		public void Draw(List<IAquariumDrawableObject> objects)
 		{
-			using (Graphics graphics = CreateGraphics())
+			_objects = objects;
+			
+			Invalidate();
+			Update();
+		}
+
+		protected override void OnPaint(PaintEventArgs e)
+		{
+			base.OnPaint(e);
+
+			if (_objects == null)
+				return;
+
+			foreach (IAquariumDrawableObject obj in _objects)
 			{
-				int x = imageInfo.Point.X - imageInfo.Size.Width / 2;
-				//int y = InvertY(imageInfo.Point.Y - imageInfo.Size.Height / 2, this.Height);
-				int y = imageInfo.Point.Y - imageInfo.Size.Height / 2;
-
-				int width = imageInfo.Size.Width * SCALE_MULTIPLIER;
-				int height = imageInfo.Size.Height * SCALE_MULTIPLIER;
-				
-				Rectangle rectange = new Rectangle(x, y, width, height);
-				graphics.DrawImage(imageInfo.Image, rectange);
+				obj.Draw(this, e.Graphics);
 			}
-		}
-
-		private int InvertY(int y, int maxY)
-		{
-			return maxY - y;
 		}
 	}
 }

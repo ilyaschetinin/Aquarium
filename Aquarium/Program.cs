@@ -6,6 +6,7 @@ using Aquarium.Model;
 using Aquarium.Model.Factory;
 using Aquarium.Model.Enums;
 using Aquarium.View.Drawers;
+using Aquarium.Properties;
 
 namespace Aquarium
 {
@@ -21,16 +22,13 @@ namespace Aquarium
 			Application.SetCompatibleTextRenderingDefault(false);
 
 			Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
-			
-			MainForm form = new MainForm();
-
-			AquariumObjectFactory factory = GetFactory(form);
 
 			AquariumModel model = AquariumModel.Instance;
-			model.Init(new Model.Initialization.AquariumInitializationParameters(form.Size.Width, form.Size.Height), new Model.Initialization.AquariumObjectListInitializer(), factory, form);
+			MainForm form = new MainForm(model);
 
-			model.Start();
-
+			AquariumObjectFactory factory = GetFactory();
+			model.Init(new Model.Initialization.AquariumInitializationParameters(form.Size.Width, form.Size.Height), new Model.Initialization.AquariumObjectListInitializer(), factory);
+			
 			Application.Run(form);
 		}
 
@@ -43,12 +41,12 @@ namespace Aquarium
 			MessageBox.Show(msg);
 		}
 
-		private static AquariumObjectFactory GetFactory(Aquarium.View.IDrawableView drawView)
+		private static AquariumObjectFactory GetFactory()
 		{
 			AquariumObjectFactory factory = new AquariumObjectFactory();
 
-			factory.Register(AquariumObjectType.Fish, new FishDrawer(drawView));
-			factory.Register(AquariumObjectType.Seaweed, new SeaweedDrawer(drawView));
+			factory.Register(AquariumObjectType.Fish, new Renderer(Resources.Fish));
+			factory.Register(AquariumObjectType.Seaweed, new Renderer(Resources.Seaweed));
 
 			return factory;
 		}

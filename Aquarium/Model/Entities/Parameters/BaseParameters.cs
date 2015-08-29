@@ -9,15 +9,6 @@ namespace Aquarium.Model.Entities.Parameters
 	public class BaseParameters
 	{
 		/// <summary>
-		/// Id рыбки
-		/// </summary>
-		public int Id
-		{
-			get;
-			set;
-		}
-
-		/// <summary>
 		/// Позиция по оси X
 		/// </summary>
 		public int X

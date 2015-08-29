@@ -8,63 +8,51 @@ using System.Text;
 using System.Windows.Forms;
 using Aquarium.View;
 using Aquarium.Model;
-using Aquarium.View.Entities;
-using Aquarium.Utils;
+using Aquarium.Model.Entities.Interfaces;
+using Aquarium.Model.Events;
 
 namespace Aquarium
 {
-	public partial class MainForm : Form, IView, IDrawableView
+	public partial class MainForm : Form
 	{
-		public MainForm()
+		private IAquarium _aquariumModel;
+		
+		public MainForm(IAquarium aquariumModel)
 		{
 			InitializeComponent();
+			
+			_aquariumModel = aquariumModel;
+			_aquariumModel.UnhandledError += HandleException;
+			_aquariumModel.ModelUpdated += HandleModelUpdated;
 
-			this.DoubleBuffered = true;
+			_aquariumModel.SetSize(aquariumControl.ClientSize.Width, aquariumControl.ClientSize.Height);
 		}
 
-		public void Draw(ImageInfo imageInfo)
+		private void MainForm_Shown(object sender, EventArgs e)
 		{
-			this.UIThread(() =>
-			{
-				aquariumControl.Draw(imageInfo);
-			});
+			_aquariumModel.Start();
 		}
 
 		/// <summary>
-		/// Вызывается перед обновлением
+		/// Обновить представление
 		/// </summary>
-		public void OnBeforeUpdate()
+		private void HandleModelUpdated(object sender, ModelUpdatedEventArgs e)
 		{
-			this.UIThread(() =>
-			{
-				aquariumControl.Invalidate();
-				aquariumControl.Update();
-			});
+			aquariumControl.Draw(e.Objects);
 		}
 
 		/// <summary>
 		/// Обработать исключение
 		/// </summary>
-		public void HandleException(Exception ex)
+		private void HandleException(object sender, UnhandledErrorEventArgs e)
 		{
-			this.UIThread(() =>
-			{
-				string msg = ex.ToString();
-				MessageBox.Show(msg);
-			});
+			string msg = e.Ex.ToString();
+			MessageBox.Show(msg);
 		}
 
-		//protected override void OnShown(EventArgs e)
-		//{
-		//    base.OnShown(e);
-
-		//    // Задаем размеры аквариума
-		//    int x = aquariumControl.Size.Width;
-		//    int y = aquariumControl.Size.Height;
-		//    _controller.Init(x, y);
-
-		//    // Запускаем аквариум
-		//    _controller.Start();
-		//}
+		private void MainForm_Resize(object sender, EventArgs e)
+		{
+			_aquariumModel.SetSize(aquariumControl.ClientSize.Width, aquariumControl.ClientSize.Height);
+		}
 	}
 }

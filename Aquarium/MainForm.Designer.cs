@@ -46,9 +46,10 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(784, 447);
 			this.Controls.Add(this.aquariumControl);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Name = "MainForm";
 			this.Text = "Aquarium";
+			this.Shown += new System.EventHandler(this.MainForm_Shown);
+			this.Resize += new System.EventHandler(this.MainForm_Resize);
 			this.ResumeLayout(false);
 
 		}

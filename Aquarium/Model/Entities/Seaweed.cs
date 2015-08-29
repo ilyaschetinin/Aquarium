@@ -5,62 +5,22 @@ using System.Text;
 using Aquarium.Model.Entities.Parameters;
 using Aquarium.Model.Entities.Interfaces;
 using Aquarium.Model.Strategies;
+using System.Drawing;
+using Aquarium.Model.Rendering;
 
 namespace Aquarium.Model.Entities
 {
-	public class Seaweed : IAquariumObject, IAquariumDrawableObject
+	/// <summary>
+	/// Водоросль
+	/// </summary>
+	public class Seaweed : AquariumObject, IAquariumObject, IAquariumDrawableObject
 	{
 		#region Properties
 
 		/// <summary>
-		/// Id рыбки
-		/// </summary>
-		public int Id
-		{
-			get;
-			private set;
-		}
-
-		/// <summary>
-		/// Позиция рыбки по оси X
-		/// </summary>
-		public int X
-		{
-			get;
-			private set;
-		}
-
-		/// <summary>
-		/// Позиция рыбки по оси Y
-		/// </summary>
-		public int Y
-		{
-			get;
-			private set;
-		}
-
-		/// <summary>
-		/// Размер рыбки по оси X
-		/// </summary>
-		public int SizeX
-		{
-			get;
-			private set;
-		}
-
-		/// <summary>
-		/// Размер рыбки по оси Y
-		/// </summary>
-		public int SizeY
-		{
-			get;
-			private set;
-		}
-
-		/// <summary>
 		/// Рисователь
 		/// </summary>
-		public IAquariumObjectDrawer Drawer
+		public IAquariumObjectRenderer Renderer
 		{
 			get;
 			set;
@@ -73,15 +33,10 @@ namespace Aquarium.Model.Entities
 		/// <summary>
 		/// Конструктор
 		/// </summary>
-		public Seaweed(IAquariumObjectDrawer drawer, SeaweedParameters parameters)
+		public Seaweed(IAquariumObjectRenderer drawer, SeaweedParameters parameters)
+			: base(parameters)
 		{
-			Drawer = drawer;
-
-			Id = parameters.Id;
-			X = parameters.X;
-			Y = parameters.Y;
-			SizeX = parameters.SizeX;
-			SizeY = parameters.SizeY;
+			Renderer = drawer;
 		}
 
 		#endregion Constructor
@@ -91,11 +46,11 @@ namespace Aquarium.Model.Entities
 		/// <summary>
 		/// Нарисовать водоросль
 		/// </summary>
-		public void Draw()
+		public void Draw(IDrawingControl control, Graphics graphics)
 		{
-			if (Drawer != null)
+			if (Renderer != null)
 			{
-				Drawer.Draw(this);
+				Renderer.Render(this, control, graphics);
 			}
 		}
 

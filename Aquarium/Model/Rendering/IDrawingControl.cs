@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
-using Aquarium.View.Entities;
 
-namespace Aquarium.View
+namespace Aquarium.Model.Rendering
 {
-	public interface IDrawableView
+	public interface IDrawingControl
 	{
-		void Draw(ImageInfo imageInfo);
+		Size Size { get; }
 	}
 }

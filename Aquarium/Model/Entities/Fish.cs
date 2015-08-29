@@ -6,58 +6,19 @@ using Aquarium.Model.Enums;
 using Aquarium.Model.Strategies;
 using Aquarium.Model.Entities.Parameters;
 using Aquarium.Model.Entities.Interfaces;
+using System.Drawing;
+using Aquarium.Model.Rendering;
+using Aquarium.Model.Position;
 
 namespace Aquarium.Model.Entities
 {
-	public class Fish : IFishContext, IAquariumObject, IAquariumMovableObject, IAquariumDrawableObject
+	/// <summary>
+	/// Рыбка
+	/// </summary>
+	public class Fish : AquariumObject, IAquariumMovableObjectEditable, IAquariumObject, IAquariumMovableObject, IAquariumDrawableObject
 	{
 		#region Properties
-
-		/// <summary>
-		/// Id рыбки
-		/// </summary>
-		public int Id
-		{
-			get;
-			private set;
-		}
-
-		/// <summary>
-		/// Позиция рыбки по оси X
-		/// </summary>
-		public int X
-		{
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// Позиция рыбки по оси Y
-		/// </summary>
-		public int Y
-		{
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// Размер рыбки по оси X
-		/// </summary>
-		public int SizeX
-		{
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// Размер рыбки по оси Y
-		/// </summary>
-		public int SizeY
-		{
-			get;
-			set;
-		}
-
+		
 		/// <summary>
 		/// Напраление движения рыбки
 		/// </summary>
@@ -88,7 +49,7 @@ namespace Aquarium.Model.Entities
 		/// <summary>
 		/// Рисователь
 		/// </summary>
-		public IAquariumObjectDrawer Drawer
+		public IAquariumObjectRenderer Renderer
 		{
 			get;
 			set;
@@ -101,15 +62,11 @@ namespace Aquarium.Model.Entities
 		/// <summary>
 		/// Конструктор
 		/// </summary>
-		public Fish(IAquariumObjectDrawer drawer, FishParameters parameters)
+		public Fish(IAquariumObjectRenderer renderer, FishParameters parameters)
+			: base(parameters)
 		{
-			Drawer = drawer;
+			Renderer = renderer;
 
-			Id = parameters.Id;
-			X = parameters.X;
-			Y = parameters.Y;
-			SizeX = parameters.SizeX;
-			SizeY = parameters.SizeY;
 			MovementDirection = parameters.MovementDirection;
 			Speed = parameters.Speed;
 			MovementStrategy = parameters.MovementStrategy;
@@ -122,7 +79,7 @@ namespace Aquarium.Model.Entities
 		/// <summary>
 		/// Подвинуть рыбку
 		/// </summary>
-		public void Move(IAquariumContext aquarium)
+		public void Move(IAquariumPositionContext aquarium)
 		{
 			if (MovementStrategy != null)
 			{
@@ -133,11 +90,11 @@ namespace Aquarium.Model.Entities
 		/// <summary>
 		/// Нарисовать рыбку
 		/// </summary>
-		public void Draw()
+		public void Draw(IDrawingControl control, Graphics graphics)
 		{
-			if (Drawer != null)
+			if (Renderer != null)
 			{
-				Drawer.Draw(this);
+				Renderer.Render(this, control, graphics);
 			}
 		}
 

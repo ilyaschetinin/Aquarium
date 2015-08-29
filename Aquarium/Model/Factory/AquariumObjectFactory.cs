@@ -7,6 +7,7 @@ using Aquarium.Model.Entities.Parameters;
 using Aquarium.Model.Enums;
 using Aquarium.Model.Strategies;
 using Aquarium.Model.Entities.Interfaces;
+using Aquarium.Model.Rendering;
 
 namespace Aquarium.Model.Factory
 {
@@ -24,14 +25,14 @@ namespace Aquarium.Model.Factory
 			AquariumTypeDescription typeDescription = GetTypeDescription(aquariumObjectType);
 			
 			Type type = typeDescription.ObjectType;
-			IAquariumObjectDrawer drawer = typeDescription.Drawer;
-			return (IAquariumObject)Activator.CreateInstance(type, drawer, parameter);
+			IAquariumObjectRenderer renderer = typeDescription.Renderer;
+			return (IAquariumObject)Activator.CreateInstance(type, renderer, parameter);
 		}
 
-		public void Register(AquariumObjectType aquariumObjectType, IAquariumObjectDrawer drawer)
+		public void Register(AquariumObjectType aquariumObjectType, IAquariumObjectRenderer renderer)
 		{
 			AquariumTypeDescription typeDescription = GetTypeDescription(aquariumObjectType);
-			typeDescription.Drawer = drawer;
+			typeDescription.Renderer = renderer;
 		}
 		
 		protected virtual List<AquariumTypeDescription> InitTypes()
@@ -57,7 +58,7 @@ namespace Aquarium.Model.Factory
 		{
 			public AquariumObjectType AquariumObjectType { get; set; }
 			public Type ObjectType { get; set; }
-			public IAquariumObjectDrawer Drawer { get; set; }
+			public IAquariumObjectRenderer Renderer { get; set; }
 		}		
 	}
 }
