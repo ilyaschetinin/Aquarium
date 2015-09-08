@@ -36,6 +36,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.LightBlue;
 			this.Name = "AquariumControl";
+			this.Resize += new System.EventHandler(this.AquariumControl_Resize);
 			this.ResumeLayout(false);
 
 		}

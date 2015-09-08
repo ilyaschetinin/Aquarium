@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Aquarium.Model;
 using Aquarium.Model.Entities.Interfaces;
 using Aquarium.Model.Rendering;
+using Aquarium.Model.Events;
 
 namespace Aquarium.View.Controls
 {
@@ -16,11 +17,12 @@ namespace Aquarium.View.Controls
 	{
 		private const int SCALE_MULTIPLIER = 5;
 
-		private List<IAquariumDrawableObject> _objects;
-		
+		private IAquarium _aquarium;
+
 		public AquariumControl()
 		{
 			InitializeComponent();
+
 			this.SetStyle(
 				System.Windows.Forms.ControlStyles.UserPaint |
 				System.Windows.Forms.ControlStyles.AllPaintingInWmPaint |
@@ -28,24 +30,44 @@ namespace Aquarium.View.Controls
 				true);
 		}
 
-		public void Draw(List<IAquariumDrawableObject> objects)
+		public void Init(IAquarium aquarium)
 		{
-			_objects = objects;
-			
+			if (aquarium == null)
+				throw new ArgumentNullException("aquarium");
+
+			_aquarium = aquarium;
+			_aquarium.ModelUpdated += HandleModelUpdated;
+
+			RefreshSize();
+		}
+
+		private void HandleModelUpdated(object sender, ModelUpdatedEventArgs e)
+		{			
 			Invalidate();
 			Update();
+		}
+
+		private void AquariumControl_Resize(object sender, EventArgs e)
+		{
+			RefreshSize();
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			base.OnPaint(e);
 
-			if (_objects == null)
-				return;
-
-			foreach (IAquariumDrawableObject obj in _objects)
+			var objects = _aquarium.Objects.OfType<IAquariumDrawableObject>();
+			foreach (IAquariumDrawableObject obj in objects)
 			{
 				obj.Draw(this, e.Graphics);
+			}
+		}
+
+		private void RefreshSize()
+		{
+			if (_aquarium != null)
+			{
+				_aquarium.SetSize(this.ClientSize.Width, this.ClientSize.Height);
 			}
 		}
 	}

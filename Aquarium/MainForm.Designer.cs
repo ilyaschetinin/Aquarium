@@ -49,7 +49,6 @@
 			this.Name = "MainForm";
 			this.Text = "Aquarium";
 			this.Shown += new System.EventHandler(this.MainForm_Shown);
-			this.Resize += new System.EventHandler(this.MainForm_Resize);
 			this.ResumeLayout(false);
 
 		}

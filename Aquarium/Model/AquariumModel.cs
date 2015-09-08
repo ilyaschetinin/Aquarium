@@ -39,7 +39,9 @@ namespace Aquarium.Model
 		private TaskScheduler _taskScheduler;
 
 		private IAquariumPositionContext _positionContext = new AquariumPositionContext();
-		
+
+		private List<IAquariumObject> _objects;
+				
 		#endregion Fields
 
 		#region Events
@@ -79,14 +81,22 @@ namespace Aquarium.Model
 				return _instance;
 			}
 		}
-
+		
 		/// <summary>
 		/// Объекты
 		/// </summary>
-		private List<IAquariumObject> Objects
+		public IEnumerable<IAquariumObject> Objects
 		{
-			get;
-			set;
+			get
+			{
+				lock (_syncObj)
+				{
+					foreach (IAquariumObject obj in _objects)
+					{
+						yield return obj;
+					}
+				}
+			}
 		}
 
 		#endregion Properties
@@ -108,10 +118,10 @@ namespace Aquarium.Model
 		/// Инициализация аквариума
 		/// </summary>
 		public void Init(AquariumInitializationParameters parameters, AquariumObjectListInitializer aquariumObjectListInitializer, AquariumObjectFactory factory)
-		{			
-			SetSize(parameters.AquariumSizeX, parameters.AquariumSizeY);
+		{
+			_objects = aquariumObjectListInitializer.Init(parameters, _positionContext, factory);
 
-			Objects = aquariumObjectListInitializer.Init(parameters, _positionContext, factory);
+			SetSize(parameters.AquariumSizeX, parameters.AquariumSizeY);
 		}
 
 		/// <summary>
@@ -226,12 +236,7 @@ namespace Aquarium.Model
 		{
 			if (ModelUpdated != null)
 			{
-				ModelUpdatedEventArgs e = new ModelUpdatedEventArgs()
-				{
-					Objects = Objects.OfType<IAquariumDrawableObject>().ToList()
-				};
-
-				ModelUpdated(this, e);
+				ModelUpdated(this, new ModelUpdatedEventArgs());
 			}
 		}
 

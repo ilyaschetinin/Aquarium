@@ -20,12 +20,12 @@ namespace Aquarium.Model.Factory
 			_typeDescriptions = InitTypes();
 		}
 
-		public IAquariumObject Create(AquariumObjectType aquariumObjectType, BaseParameters parameter)
+		public IAquariumObject Create(AquariumObjectType aquariumObjectType, BaseParameters parameter, IAquariumObjectRenderer aquariumObjectRenderer = null)
 		{
 			AquariumTypeDescription typeDescription = GetTypeDescription(aquariumObjectType);
 			
 			Type type = typeDescription.ObjectType;
-			IAquariumObjectRenderer renderer = typeDescription.Renderer;
+			IAquariumObjectRenderer renderer = aquariumObjectRenderer ?? typeDescription.Renderer;
 			return (IAquariumObject)Activator.CreateInstance(type, renderer, parameter);
 		}
 
@@ -37,11 +37,17 @@ namespace Aquarium.Model.Factory
 		
 		protected virtual List<AquariumTypeDescription> InitTypes()
 		{
-			return new List<AquariumTypeDescription>()
+			List<AquariumTypeDescription> result = new List<AquariumTypeDescription>();
+
+			var aquariumObjectTypes = Enum.GetValues(typeof(AquariumObjectType)).Cast<AquariumObjectType>();
+			foreach (var aquariumObjectType in aquariumObjectTypes)
 			{
-				new AquariumTypeDescription() { AquariumObjectType = AquariumObjectType.Fish, ObjectType = typeof(Fish) },
-				new AquariumTypeDescription() { AquariumObjectType = AquariumObjectType.Seaweed, ObjectType = typeof(Seaweed) }
-			};
+				ObjectTypeAttribute attribute = aquariumObjectType.GetAttribute<ObjectTypeAttribute>();
+
+				result.Add(new AquariumTypeDescription() { AquariumObjectType = aquariumObjectType, ObjectType = attribute.ObjectType });
+			}
+
+			return result;
 		}
 
 		private AquariumTypeDescription GetTypeDescription(AquariumObjectType aquariumObjectType)

@@ -23,22 +23,13 @@ namespace Aquarium
 			
 			_aquariumModel = aquariumModel;
 			_aquariumModel.UnhandledError += HandleException;
-			_aquariumModel.ModelUpdated += HandleModelUpdated;
 
-			_aquariumModel.SetSize(aquariumControl.ClientSize.Width, aquariumControl.ClientSize.Height);
+			aquariumControl.Init(_aquariumModel);
 		}
 
 		private void MainForm_Shown(object sender, EventArgs e)
 		{
 			_aquariumModel.Start();
-		}
-
-		/// <summary>
-		/// Обновить представление
-		/// </summary>
-		private void HandleModelUpdated(object sender, ModelUpdatedEventArgs e)
-		{
-			aquariumControl.Draw(e.Objects);
 		}
 
 		/// <summary>
@@ -48,11 +39,6 @@ namespace Aquarium
 		{
 			string msg = e.Ex.ToString();
 			MessageBox.Show(msg);
-		}
-
-		private void MainForm_Resize(object sender, EventArgs e)
-		{
-			_aquariumModel.SetSize(aquariumControl.ClientSize.Width, aquariumControl.ClientSize.Height);
 		}
 	}
 }

@@ -45,8 +45,8 @@ namespace Aquarium
 		{
 			AquariumObjectFactory factory = new AquariumObjectFactory();
 
-			factory.Register(AquariumObjectType.Fish, new Renderer(Resources.Fish));
-			factory.Register(AquariumObjectType.Seaweed, new Renderer(Resources.Seaweed));
+			factory.Register(AquariumObjectType.Fish, new ImageRenderer(Resources.Fish));
+			factory.Register(AquariumObjectType.Seaweed, new ImageRenderer(Resources.Seaweed));
 
 			return factory;
 		}

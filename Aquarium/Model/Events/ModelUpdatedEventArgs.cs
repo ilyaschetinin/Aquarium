@@ -8,6 +8,6 @@ namespace Aquarium.Model.Events
 {
 	public class ModelUpdatedEventArgs : EventArgs
 	{
-		public List<IAquariumDrawableObject> Objects { get; set; }
+		//public List<IAquariumDrawableObject> Objects { get; set; }
 	}
 }

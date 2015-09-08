@@ -10,7 +10,7 @@ using Aquarium.Model.Enums;
 
 namespace Aquarium.View.Drawers
 {
-	public class Renderer : IAquariumObjectRenderer
+	public class ImageRenderer : IAquariumObjectRenderer
 	{
 		private Image _image;
 
@@ -29,7 +29,7 @@ namespace Aquarium.View.Drawers
 			}
 		}		
 
-		public Renderer(Image image)
+		public ImageRenderer(Image image)
 		{
 			_image = image;
 		}
