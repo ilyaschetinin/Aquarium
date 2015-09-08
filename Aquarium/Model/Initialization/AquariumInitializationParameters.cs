@@ -12,58 +12,58 @@ namespace Aquarium.Model.Initialization
 		/// <summary>
 		/// Число рыбок в аквариуме
 		/// </summary>
-		private const int FISH_COUNT = 10;
+		protected const int FISH_COUNT = 10;
 
 		/// <summary>
 		/// Число водорослей в аквариуме
 		/// </summary>
-		private const int SEAWEED_COUNT = 5;
+		protected const int SEAWEED_COUNT = 5;
 
 		/// <summary>
 		/// Минимальная скорость генерируемых рыбок
 		/// </summary>
-		private const int FISH_MIN_SPEED = 1;
+		protected const int FISH_MIN_SPEED = 1;
 
 		/// <summary>
 		/// Максимальная скорость генерируемых рыбок
 		/// </summary>
-		private const int FISH_MAX_SPEED = 20;
+		protected const int FISH_MAX_SPEED = 20;
 
 		/// Минимальный размер генерируемых рыбок по оси X
 		/// </summary>
-		private const int FISH_MIN_SIZE_X = 10;
+		protected const int FISH_MIN_SIZE_X = 10;
 
 		/// <summary>
 		/// Максимальный размер генерируемых рыбок по оси X
 		/// </summary>
-		private const int FISH_MAX_SIZE_X = 100;
+		protected const int FISH_MAX_SIZE_X = 100;
 
 		/// Минимальный размер генерируемых рыбок по оси Y
 		/// </summary>
-		private const int FISH_MIN_SIZE_Y = 10;
+		protected const int FISH_MIN_SIZE_Y = 10;
 
 		/// <summary>
 		/// Максимальный размер генерируемых рыбок по оси Y
 		/// </summary>
-		private const int FISH_MAX_SIZE_Y = 100;
+		protected const int FISH_MAX_SIZE_Y = 100;
 		
 		/// Минимальный размер генерируемых водорослей по оси X
 		/// </summary>
-		private const int SEAWEED_MIN_SIZE_X = 10;
+		protected const int SEAWEED_MIN_SIZE_X = 10;
 
 		/// <summary>
 		/// Максимальный размер генерируемых водорослей по оси X
 		/// </summary>
-		private const int SEAWEED_MAX_SIZE_X = 100;
+		protected const int SEAWEED_MAX_SIZE_X = 100;
 
 		/// Минимальный размер генерируемых водорослей по оси Y
 		/// </summary>
-		private const int SEAWEED_MIN_SIZE_Y = 10;
+		protected const int SEAWEED_MIN_SIZE_Y = 10;
 
 		/// <summary>
 		/// Максимальный размер генерируемых водорослей по оси Y
 		/// </summary>
-		private const int SEAWEED_MAX_SIZE_Y = 500;
+		protected const int SEAWEED_MAX_SIZE_Y = 500;
 
 		#endregion Constants
 				
@@ -136,6 +136,8 @@ namespace Aquarium.Model.Initialization
 		public int SeaweedMaxSizeY { get; set; }
 
 		#endregion Properties
+		
+		#region Constructor
 
 		public AquariumInitializationParameters(int aquariumSizeX, int aquariumSizeY)
 		{
@@ -155,5 +157,7 @@ namespace Aquarium.Model.Initialization
 			SeaweedMinSizeY = SEAWEED_MIN_SIZE_Y;
 			SeaweedMaxSizeY = SEAWEED_MAX_SIZE_Y;
 		}
+
+		#endregion Constructor
 	}
 }

@@ -15,27 +15,24 @@ namespace Aquarium.Model.Factory
 	{
 		private readonly List<AquariumTypeDescription> _typeDescriptions;
 
-		public AquariumObjectFactory()
+		private IRendererSelector _rendererSelector;
+
+		public AquariumObjectFactory(IRendererSelector rendererSelector)
 		{
 			_typeDescriptions = InitTypes();
+			_rendererSelector = rendererSelector;
 		}
 
-		public IAquariumObject Create(AquariumObjectType aquariumObjectType, BaseParameters parameter, IAquariumObjectRenderer aquariumObjectRenderer = null)
+		public IAquariumObject Create(AquariumObjectType aquariumObjectType, BaseParameters parameter)
 		{
 			AquariumTypeDescription typeDescription = GetTypeDescription(aquariumObjectType);
 			
 			Type type = typeDescription.ObjectType;
-			IAquariumObjectRenderer renderer = aquariumObjectRenderer ?? typeDescription.Renderer;
-			return (IAquariumObject)Activator.CreateInstance(type, renderer, parameter);
-		}
-
-		public void Register(AquariumObjectType aquariumObjectType, IAquariumObjectRenderer renderer)
-		{
-			AquariumTypeDescription typeDescription = GetTypeDescription(aquariumObjectType);
-			typeDescription.Renderer = renderer;
+			IAquariumObjectRenderer renderer = _rendererSelector.Get(aquariumObjectType, parameter);
+			return (IAquariumObject)Activator.CreateInstance(type, parameter, renderer);
 		}
 		
-		protected virtual List<AquariumTypeDescription> InitTypes()
+		protected List<AquariumTypeDescription> InitTypes()
 		{
 			List<AquariumTypeDescription> result = new List<AquariumTypeDescription>();
 
@@ -64,7 +61,6 @@ namespace Aquarium.Model.Factory
 		{
 			public AquariumObjectType AquariumObjectType { get; set; }
 			public Type ObjectType { get; set; }
-			public IAquariumObjectRenderer Renderer { get; set; }
 		}		
 	}
 }

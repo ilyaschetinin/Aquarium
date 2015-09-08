@@ -8,7 +8,7 @@ using Aquarium.Model.Enums;
 
 namespace Aquarium.Model.Strategies
 {
-	internal class SinMovementStrategy
+	public class SinMovementStrategy
 	{
 		/// <summary>
 		/// Подвинуть объект

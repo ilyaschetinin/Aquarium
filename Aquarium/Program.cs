@@ -7,6 +7,8 @@ using Aquarium.Model.Factory;
 using Aquarium.Model.Enums;
 using Aquarium.View.Drawers;
 using Aquarium.Properties;
+using Aquarium.Model.Initialization;
+using Aquarium.Model.Rendering;
 
 namespace Aquarium
 {
@@ -26,8 +28,10 @@ namespace Aquarium
 			AquariumModel model = AquariumModel.Instance;
 			MainForm form = new MainForm(model);
 
-			AquariumObjectFactory factory = GetFactory();
-			model.Init(new Model.Initialization.AquariumInitializationParameters(form.Size.Width, form.Size.Height), new Model.Initialization.AquariumObjectListInitializer(), factory);
+			IRendererSelector rendererSelector = new ImageRendererSelector();
+
+			AquariumObjectFactory factory = new AquariumObjectFactory(rendererSelector);
+			model.Init(new AquariumInitializationParametersSinFishes(form.Size.Width, form.Size.Height), new AquariumObjectListInitializerSinFishes(), factory);
 			
 			Application.Run(form);
 		}
@@ -39,16 +43,6 @@ namespace Aquarium
 		{
 			string msg = e.ToString();
 			MessageBox.Show(msg);
-		}
-
-		private static AquariumObjectFactory GetFactory()
-		{
-			AquariumObjectFactory factory = new AquariumObjectFactory();
-
-			factory.Register(AquariumObjectType.Fish, new ImageRenderer(Resources.Fish));
-			factory.Register(AquariumObjectType.Seaweed, new ImageRenderer(Resources.Seaweed));
-
-			return factory;
 		}
 	}
 }

@@ -62,7 +62,7 @@ namespace Aquarium.Model.Entities
 		/// <summary>
 		/// Конструктор
 		/// </summary>
-		public Fish(IAquariumObjectRenderer renderer, FishParameters parameters)
+		public Fish(FishParameters parameters, IAquariumObjectRenderer renderer)
 			: base(parameters)
 		{
 			Renderer = renderer;

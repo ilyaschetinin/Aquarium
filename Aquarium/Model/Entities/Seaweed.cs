@@ -33,10 +33,10 @@ namespace Aquarium.Model.Entities
 		/// <summary>
 		/// Конструктор
 		/// </summary>
-		public Seaweed(IAquariumObjectRenderer drawer, SeaweedParameters parameters)
+		public Seaweed(SeaweedParameters parameters, IAquariumObjectRenderer renderer)
 			: base(parameters)
 		{
-			Renderer = drawer;
+			Renderer = renderer;
 		}
 
 		#endregion Constructor

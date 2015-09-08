@@ -27,7 +27,7 @@ namespace Aquarium.View.Drawers
 
 				return _mirroredImage;
 			}
-		}		
+		}
 
 		public ImageRenderer(Image image)
 		{
