@@ -41,7 +41,11 @@ namespace Aquarium.Model.Factory
 			{
 				ObjectTypeAttribute attribute = aquariumObjectType.GetAttribute<ObjectTypeAttribute>();
 
-				result.Add(new AquariumTypeDescription() { AquariumObjectType = aquariumObjectType, ObjectType = attribute.ObjectType });
+				result.Add(new AquariumTypeDescription()
+				{
+					AquariumObjectType = aquariumObjectType,
+					ObjectType = attribute.ObjectType
+				});
 			}
 
 			return result;

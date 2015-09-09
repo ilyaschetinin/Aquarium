@@ -56,7 +56,7 @@ namespace Aquarium.View.Drawers
 			{
 			    if (movableObj.MovementDirection == Direction.Left)
 			    {
-			        image = MirroredImage;
+					image = MirroredImage;
 			    }
 			}
 

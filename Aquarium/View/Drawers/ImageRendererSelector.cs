@@ -15,6 +15,9 @@ namespace Aquarium.View.Drawers
 	{
 		private Dictionary<string, ImageRenderer> _renderers = new Dictionary<string, ImageRenderer>();
 
+		/// <summary>
+		/// Получить рендерер
+		/// </summary>
 		public virtual IAquariumObjectRenderer Get(AquariumObjectType aquariumObjectType, BaseParameters parameters)
 		{
 			string key = GetKey(aquariumObjectType, parameters);
@@ -29,10 +32,14 @@ namespace Aquarium.View.Drawers
 			return renderer;
 		}
 
+		/// <summary>
+		/// Получить ключ рендерера
+		/// </summary>
 		private string GetKey(AquariumObjectType aquariumObjectType, BaseParameters parameters)
 		{
 			string key = ((int)aquariumObjectType).ToString();
-
+			
+			// Здесь получаются слишком большие строки
 			FishParameters fishParameters = parameters as FishParameters;
 			if (fishParameters != null && fishParameters.MovementStrategy != null)
 			{
@@ -43,6 +50,12 @@ namespace Aquarium.View.Drawers
 			return key;
 		}
 
+		/// <summary>
+		/// Создать рендерер
+		/// </summary>
+		/// <param name="aquariumObjectType"></param>
+		/// <param name="parameters"></param>
+		/// <returns></returns>
 		private ImageRenderer CreateRenderer(AquariumObjectType aquariumObjectType, BaseParameters parameters)
 		{
 			ImageRenderer renderer = null;
@@ -56,6 +69,9 @@ namespace Aquarium.View.Drawers
 			return renderer;
 		}
 
+		/// <summary>
+		/// Получить изображение объекта
+		/// </summary>
 		private Image GetImage(AquariumObjectType aquariumObjectType, BaseParameters parameters)
 		{
 			Image image = null;
@@ -73,6 +89,9 @@ namespace Aquarium.View.Drawers
 			return image;
 		}
 		
+		/// <summary>
+		/// Получить изображение рыбки
+		/// </summary>
 		private Image GetFishImage(AquariumObjectType aquariumObjectType, BaseParameters parameters)
 		{
 			FishParameters fishParameters = parameters as FishParameters;
