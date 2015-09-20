@@ -8,7 +8,7 @@ using Aquarium.Model.Position;
 
 namespace Aquarium.Model.Entities.Interfaces
 {
-	public interface IAquariumMovableObject : IAquariumObject
+	public interface IAquariumMovableObject : IAquariumDrawableObject, IAquariumObject
 	{
 		/// <summary>
 		/// Напраление движения

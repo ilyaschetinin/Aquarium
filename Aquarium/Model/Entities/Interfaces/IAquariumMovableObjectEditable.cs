@@ -3,31 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Aquarium.Model.Enums;
+using Aquarium.Model.Position;
 
 namespace Aquarium.Model.Entities.Interfaces
 {
-	public interface IAquariumMovableObjectEditable
+	public interface IAquariumMovableObjectEditable : IAquariumObjectEditable, IAquariumDrawableObject
 	{
-		/// <summary>
-		/// Позиция объекта по оси X
-		/// </summary>
-		int X { get; set; }
-
-		/// <summary>
-		/// Позиция объекта по оси Y
-		/// </summary>
-		int Y { get; set; }
-
-		/// <summary>
-		/// Размер объекта по оси X
-		/// </summary>
-		int SizeX { get; }
-
-		/// <summary>
-		/// Размер объекта по оси Y
-		/// </summary>
-		int SizeY { get; }
-
 		/// <summary>
 		/// Напраление движения объекта
 		/// </summary>
@@ -37,5 +18,10 @@ namespace Aquarium.Model.Entities.Interfaces
 		/// Скорость объекта
 		/// </summary>
 		int Speed { get; set; }
+
+		/// <summary>
+		/// Подвинуть
+		/// </summary>
+		void Move(IAquariumPositionContext aquarium);
 	}
 }

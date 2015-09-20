@@ -9,6 +9,7 @@ using Aquarium.View.Drawers;
 using Aquarium.Properties;
 using Aquarium.Model.Initialization;
 using Aquarium.Model.Rendering;
+using Aquarium.Model.Decorators;
 
 namespace Aquarium
 {
@@ -30,7 +31,10 @@ namespace Aquarium
 
 			IRendererSelector rendererSelector = new ImageRendererSelector();
 
-			AquariumObjectFactory factory = new AquariumObjectFactory(rendererSelector);
+			IAquariumObjectRenderer healthRenderer = new HealthRenderer();
+			IAquariumObjectWrapper aquariumObjectWrapper = new AquariumObjectWrapper(healthRenderer);
+
+			AquariumObjectFactory factory = new AquariumObjectFactory(rendererSelector, aquariumObjectWrapper);
 			model.Init(new AquariumInitializationParametersSinFishes(form.Size.Width, form.Size.Height), new AquariumObjectListInitializerSinFishes(), factory);
 			
 			Application.Run(form);

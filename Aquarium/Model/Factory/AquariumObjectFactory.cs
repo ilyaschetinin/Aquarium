@@ -8,6 +8,7 @@ using Aquarium.Model.Enums;
 using Aquarium.Model.Strategies;
 using Aquarium.Model.Entities.Interfaces;
 using Aquarium.Model.Rendering;
+using Aquarium.Model.Decorators;
 
 namespace Aquarium.Model.Factory
 {
@@ -16,11 +17,13 @@ namespace Aquarium.Model.Factory
 		private readonly List<AquariumTypeDescription> _typeDescriptions;
 
 		private IRendererSelector _rendererSelector;
+		private IAquariumObjectWrapper _aquariumObjectWrapper;
 
-		public AquariumObjectFactory(IRendererSelector rendererSelector)
+		public AquariumObjectFactory(IRendererSelector rendererSelector, IAquariumObjectWrapper aquariumObjectWrapper)
 		{
 			_typeDescriptions = InitTypes();
 			_rendererSelector = rendererSelector;
+			_aquariumObjectWrapper = aquariumObjectWrapper;
 		}
 
 		public IAquariumObject Create(AquariumObjectType aquariumObjectType, BaseParameters parameter)
@@ -29,7 +32,9 @@ namespace Aquarium.Model.Factory
 			
 			Type type = typeDescription.ObjectType;
 			IAquariumObjectRenderer renderer = _rendererSelector.Get(aquariumObjectType, parameter);
-			return (IAquariumObject)Activator.CreateInstance(type, parameter, renderer);
+			IAquariumObject aquariumObject = (IAquariumObject)Activator.CreateInstance(type, parameter, renderer);
+			IAquariumObject wrappedAquariumObject = _aquariumObjectWrapper.Wrap(aquariumObject);
+			return wrappedAquariumObject;
 		}
 		
 		protected List<AquariumTypeDescription> InitTypes()

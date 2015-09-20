@@ -46,7 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\Decorators\AquariumHealthDecorator.cs" />
+    <Compile Include="Model\Decorators\AquariumMovableObjectDecoratorBase.cs" />
+    <Compile Include="Model\Decorators\AquariumObjectWrapper.cs" />
+    <Compile Include="Model\Decorators\IAquariumObjectWrapper.cs" />
     <Compile Include="Model\Entities\AquariumObject.cs" />
+    <Compile Include="Model\Entities\Interfaces\IAquariumObjectEditable.cs" />
     <Compile Include="Model\Enums\EnumExtension.cs" />
     <Compile Include="Model\Events\ModelUpdatedEventArgs.cs" />
     <Compile Include="Model\Events\UnhandledErrorEventArgs.cs" />
@@ -92,6 +97,7 @@
     <Compile Include="Model\Strategies\SimpleMovementStrategy.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="View\Drawers\HealthRenderer.cs" />
     <Compile Include="View\Drawers\ImageRenderer.cs" />
     <Compile Include="View\Drawers\ImageRendererSelector.cs" />
     <EmbeddedResource Include="View\Controls\AquariumControl.resx">
