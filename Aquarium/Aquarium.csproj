@@ -58,6 +58,7 @@
     <Compile Include="Model\Factory\ObjectTypeAttribute.cs" />
     <Compile Include="Model\Initialization\AquariumInitializationParametersSinFishes.cs" />
     <Compile Include="Model\Initialization\AquariumObjectListInitializerSinFishes.cs" />
+    <Compile Include="Model\Population\IAquariumPopulationController.cs" />
     <Compile Include="Model\Position\AquariumPositionContext.cs" />
     <Compile Include="Model\Rendering\IDrawingControl.cs" />
     <Compile Include="Model\Rendering\IRendererSelector.cs" />

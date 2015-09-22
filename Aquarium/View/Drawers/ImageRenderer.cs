@@ -37,7 +37,7 @@ namespace Aquarium.View.Drawers
 		public void Render(IAquariumObject obj, IDrawingControl control, Graphics graphics)
 		{			
 			int x = obj.X - obj.SizeX / 2;
-			int y = InvertY(obj.Y + obj.SizeY / 2, control.Size.Height);
+			int y = control.InvertY(obj.Y + obj.SizeY / 2);
 			int sizeX = obj.SizeX;
 			int sizeY = obj.SizeY;
 
@@ -61,11 +61,6 @@ namespace Aquarium.View.Drawers
 			}
 
 			return image;
-		}
-
-		private int InvertY(int y, int maxY)
-		{
-			return maxY - y;
 		}
 	}
 }

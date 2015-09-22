@@ -32,7 +32,7 @@ namespace Aquarium
 			IRendererSelector rendererSelector = new ImageRendererSelector();
 
 			IAquariumObjectRenderer healthRenderer = new HealthRenderer();
-			IAquariumObjectWrapper aquariumObjectWrapper = new AquariumObjectWrapper(healthRenderer);
+			IAquariumObjectWrapper aquariumObjectWrapper = new AquariumObjectWrapper(healthRenderer, model);
 
 			AquariumObjectFactory factory = new AquariumObjectFactory(rendererSelector, aquariumObjectWrapper);
 			model.Init(new AquariumInitializationParametersSinFishes(form.Size.Width, form.Size.Height), new AquariumObjectListInitializerSinFishes(), factory);

@@ -8,6 +8,9 @@ namespace Aquarium.Model.Rendering
 {
 	public interface IDrawingControl
 	{
-		Size Size { get; }
+		/// <summary>
+		/// Перевернуть ось Y
+		/// </summary>
+		int InvertY(int currentY);
 	}
 }

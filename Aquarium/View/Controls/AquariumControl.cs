@@ -41,6 +41,14 @@ namespace Aquarium.View.Controls
 			RefreshSize();
 		}
 
+		/// <summary>
+		/// Перевернуть ось Y
+		/// </summary>
+		public int InvertY(int currentY)
+		{
+			return this.Size.Height - currentY;
+		}
+
 		private void HandleModelUpdated(object sender, ModelUpdatedEventArgs e)
 		{			
 			Invalidate();

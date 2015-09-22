@@ -9,6 +9,9 @@ namespace Aquarium.Model.Entities.Interfaces
 {
 	public interface IAquariumDrawableObject
 	{
+		/// <summary>
+		/// Нарисовать объект
+		/// </summary>
 		void Draw(IDrawingControl control, Graphics graphics);
 	}
 }

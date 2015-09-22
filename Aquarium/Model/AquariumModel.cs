@@ -15,17 +15,18 @@ using Aquarium.View;
 using Aquarium.Model.Events;
 using Aquarium.Model.Rendering;
 using Aquarium.Model.Position;
+using Aquarium.Model.Population;
 
 namespace Aquarium.Model
 {
-	public sealed class AquariumModel : IAquarium
+	public sealed class AquariumModel : IAquarium, IAquariumPopulationController
 	{
 		#region Constants
 
 		/// <summary>
 		/// Частота обновления аквариума в миллисекундах
 		/// </summary>
-		private const int REFRESH_FREQUENCY_MS = 30;
+		private const int REFRESH_FREQUENCY_MS = 100;
 
 		#endregion Constants
 
@@ -41,6 +42,8 @@ namespace Aquarium.Model
 		private IAquariumPositionContext _positionContext = new AquariumPositionContext();
 
 		private List<IAquariumObject> _objects;
+
+		private List<IAquariumObject> _objectsToRemove = new List<IAquariumObject>();
 				
 		#endregion Fields
 
@@ -159,8 +162,23 @@ namespace Aquarium.Model
 		/// </summary>
 		public void SetSize(int sizeX, int sizeY)
 		{
-			_positionContext.SetSize(sizeX, sizeY);
+			lock (_syncObj)
+			{
+				_positionContext.SetSize(sizeX, sizeY);
+			}
 		}
+		
+		/// <summary>
+		/// Убрать объект
+		/// </summary>
+		/// <param name="obj">Объект, который надо убрать</param>
+		public void Remove(IAquariumObject obj)
+		{
+			lock (_syncObj)
+			{
+				_objectsToRemove.Add(obj);
+			}
+		}		
 
 		#endregion Public Methods
 
@@ -181,6 +199,9 @@ namespace Aquarium.Model
 				// Передвигаем объекты
 				Move();
 
+				// Удаляем объекты
+				ProcessRemovedObjects();
+
 				// Обновляем представление
 				Task childTask = Task.Factory.StartNew(RaiseModelUpdated, token, TaskCreationOptions.AttachedToParent, _taskScheduler);
 				childTask.Wait();
@@ -199,6 +220,22 @@ namespace Aquarium.Model
 			{
 				IAquariumPositionContext aquariumContext = _positionContext;
 				movableObject.Move(aquariumContext);
+			}
+		}
+		
+		/// <summary>
+		/// Удалить объекты
+		/// </summary>
+		private void ProcessRemovedObjects()
+		{
+			lock (_syncObj)
+			{
+				foreach (IAquariumObject obj in _objectsToRemove)
+				{
+					_objects.Remove(obj);
+				}
+
+				_objectsToRemove.Clear();
 			}
 		}
 
